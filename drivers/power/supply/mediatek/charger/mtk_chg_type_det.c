@@ -189,6 +189,7 @@ struct chg_type_info {
 	int pd_verifed;
 	int pd_active;
 	int pd_type;
+	int apdo_max;
 #endif
 };
 
@@ -736,6 +737,9 @@ static int mt_usb_get_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_PD_VERIFY_IN_PROCESS:
 		mtk_charger_get_prop_pd_verify_process(val);
 		break;
+	case POWER_SUPPLY_PROP_APDO_MAX:
+		val->intval = mtk_chg->cti->apdo_max;
+		break;
 	default:
 		return -EINVAL;
 	}
@@ -793,6 +797,9 @@ static int mt_usb_set_property(struct power_supply *psy,
 		break;
 	case POWER_SUPPLY_PROP_PD_VERIFY_IN_PROCESS:
 		rc = mtk_charger_set_prop_pd_verify_process(val);
+		break;
+	case POWER_SUPPLY_PROP_APDO_MAX:
+		mtk_chg->cti->apdo_max = val->intval;
 		break;
 #endif
 	default:
@@ -936,6 +943,7 @@ static enum power_supply_property mt_usb_properties[] = {
 	POWER_SUPPLY_PROP_PD_ACTIVE,
 	POWER_SUPPLY_PROP_FASTCHARGE_MODE,
 	POWER_SUPPLY_PROP_PD_TYPE,
+	POWER_SUPPLY_PROP_APDO_MAX,
 #endif
 	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
 	POWER_SUPPLY_PROP_TYPE_RECHECK,
@@ -1491,7 +1499,6 @@ static int mt_charger_resume(struct device *dev)
 
 	power_supply_changed(mt_charger->chg_psy);
 	power_supply_changed(mt_charger->ac_psy);
-	power_supply_changed(mt_charger->usb_psy);
 	power_supply_changed(mt_charger->main_psy);
 
 	return 0;

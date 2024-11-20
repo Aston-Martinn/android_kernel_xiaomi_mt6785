@@ -1708,10 +1708,10 @@ void do_sw_jeita_state_machine(struct charger_manager *info)
 			|| sw_jeita->sm == TEMP_BELOW_T0
 			|| sw_jeita->sm == TEMP_TN1_TO_T0)
 			&& (info->battery_temp
-			<= info->data.temp_t1_thres_plus_x_degree)) {
+			<= info->data.temp_t1_thres)) {
 			if (sw_jeita->sm == TEMP_T0_TO_T1) {
 				chr_err("[SW_JEITA] Battery Temperature between %d and %d !!\n",
-					info->data.temp_t1_thres_plus_x_degree,
+					info->data.temp_t1_thres,
 					info->data.temp_t1p5_thres);
 			}
 			if (sw_jeita->sm == TEMP_BELOW_T0) {
